@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>7 Golden Rules of clean, simple and maintainable code</title>
+
+		<meta name="description" content="A talk on writing Simple, Clean, Readable, Understanable, and eventually Mainteanable code">
+		<meta name="author" content="Geshan Manandhar">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/css/reveal.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/css/theme/sky.min.css" id="theme">
+		<link rel="stylesheet" href="css/custom.css">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/lib/css/zenburn.min.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var url = 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/css/print/';
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = url + (window.location.search.match( /print-pdf/gi ) ? 'pdf.min.css' : 'paper.min.css');
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-markdown>
+						## 7 Golden Rules of Clean, Simple and Maintainable Code
+						---
+						Created by [Sumit Chhetri](https://www.facebook.com/SHhetri) / [@shhetri](https://twitter.com/shhetri)
+
+						[YIPL](http://younginnovations.com.np/) , Kumaripati, Lalitpur
+
+				</section>
+
+				<section data-markdown>
+						## Why Write clean code ?
+				</section>
+
+				<section data-markdown>
+						### Code for humans not machines
+
+						#### Think that the next person who reads your code is [Ghas Katne Khurkera](https://www.youtube.com/watch?v=kKVp6ytaJJA) ko bhoot.
+
+						#### If you don't write clean code, he will follow you to the end.
+
+						![bhoot](images/bhoot.jpg "bhoot")
+				</section>
+
+				<section data-markdown>
+						### Rule 1: Follow a consistent coding standard
+
+						* If you are doing PHP follow [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
+						* Other languages like Java, Python, Javascript also have coding standards
+						* Use a linter or CS fixer to follow the standard. Integrate build tools in Sublime or use default PHPStrom code refactor, to automate this
+						* Makes it easy for everyone - including yourself - in the team, to read the code
+				</section>
+
+				<section data-markdown>
+					### Rule 2: Name things properly, long variable and function/method names are allowed
+
+					* Stick to one convention. ($someVariable or $SomeVariable or $some_variable)
+					* Don't use abbreviations, may not be understandable to the person, who reads your code
+					* Naming is difficult, do it well. Name classes, variables and methods that make sense
+					* Do not be redundant. 
+					* [Example](https://gist.github.com/shhetri/bb6dd1981267eb3a4cf4#file-rule-php-L3)
+				</section>
+
+				<section data-markdown>
+					### Rule 3: Be expressive, write code as you speak and be optimally verbose
+
+					* Focus on API rather than patterns.
+					* Frist, write down the API for perfect scenario, observe how it feels, then jump to coding and make it work.
+					* Tell, don't ask.
+					* [Example](https://gist.github.com/shhetri/bb6dd1981267eb3a4cf4#file-rule-php-L28)
+				</section>
+				<section data-markdown>
+					### Rule 4: Max indent per method should be 2, in case of exceptions 3
+
+					* Avoid the use of else.
+					* Extract the logic to other readable method.
+					* Return early
+					* Throw exception
+					* [Example](https://gist.github.com/shhetri/bb6dd1981267eb3a4cf4#file-rule-php-L60)
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						6 levels of indentation (in our public code) [source](https://github.com/younginnovations/aidstream/blob/master/application/modules/default/controllers/WepController.php)
+						```
+		public function settingsAction()
+		{
+			//0
+			if ($_POST) {
+	            //1
+	            try {
+	            	//2
+	                 ...
+	                 } else {
+	                 	...
+	                 	//3
+	                    if ($reportingOrgNew != $reportingOrgOld) {
+	                        //4
+	                        if ($save == "ok") {
+	                            ...
+	                            //5
+	                            if ($activityPublish) {
+	                                //6
+	                                $this->pushToRegistry('Published');
+	                            }
+										 ...
+							```
+						</script>
+							<aside class="notes">
+        					* also mention if you access property of a property a->b->c->d() there something wrong
+									* create wrapper for it.
+    					</aside>
+    				</section>
+				</section>
+
+				<section data-markdown>
+						### Rule 5: Avoid creating [god object](https://en.wikipedia.org/wiki/God_object) and long methods
+
+						* One class should do one thing not everything like `StatusChanger` or `StatusManager` not `StatusGod`
+						* Avoid using **`and`** in method names like **`validateAndSave`**, one method needs to do one thing and one thing well
+						* Keep methods small, a 50 line method is a problem
+						* Keep classes small, a 1000 line class is a pain
+						* Keep the instance variables to as low as 6 or 7.
+
+				</section>
+
+				<section data-markdown>
+						### Rule 6: Keep the method in one place, inject the class and call it, [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)
+
+						* In MVC keep controllers slim, business logic belongs to services or repositories, check [symfony best practice](http://symfony.com/doc/current/best_practices/controllers.html) for controller 5-10-20
+						* If you access property of a property a->b->c->d() there is something wrong, you can use a wrapper or proxy function.
+						* Use language constructs like interfaces, traits to make code more expressive and reusable
+						* If you find yourself copying the same code several times, extract that code into its own method.
+						* Refactor your code, every once in a while.
+						* [Example](https://gist.github.com/shhetri/bb6dd1981267eb3a4cf4#file-rule-php-L145)
+				</section>
+
+				<section data-markdown>
+						### Rule 7: Avoid in-line comments (comment with code), put comments in the method doc
+
+						* Comment is a code smell (anti pattern), like [here](https://github.com/younginnovations/aidstream/blob/master/application/modules/simplified/models/Simplified.php#L38)
+						* If you need to write comments to explain your code, it means you need to put it in a new method.
+						* [Example](https://gist.github.com/shhetri/bb6dd1981267eb3a4cf4#file-rule-php-L247)
+
+						```
+						public function addActivity($data , $default)
+						{
+							 $this->defaults = $default;
+							 $identity = Zend_Auth::getInstance()->getIdentity();
+							 //var_dump($data);exit;
+							 $model = $this->model;
+							 $modelActivity =  new Model_Activity();
+
+							 $activitiesId = $model->getIdByField('iati_activities', 'account_id', $identity->account_id);
+
+							 //Create activity and its defaults
+							 $iatiIdentifier['activity_identifier'] = $data['identifier'];
+						```
+				</section>
+				<section data-markdown>
+					### Other considerations
+
+					* Avoid working with just arrays for large data sets, use class and type hint
+					* Rather than starting to write something on your own spend 5 minutes to read the framework/library documentation to know if its already provided
+					* Extract out methods and rename variables as necessary
+					* Read about cyclomatic complexity and N-Path complexity, [here](http://modess.io/2013/05/19/cyclomatic-and-npath-complexity-explained/)
+				</section>
+
+				<section data-markdown>
+						### Recap 1
+
+						* Rule 1: Follow a consistent coding standard
+						* Rule 2: Name things properly, long variable and function names are allowed
+						* Rule 3: Be expressive, write code as you speak and be optimally verbose
+						* Rule 4: Max indent per method should be 2, in case of exceptions 3
+				</section>
+
+				<section data-markdown>
+						### Recap 2
+
+						* Rule 5: Avoid creating [god object](https://en.wikipedia.org/wiki/God_object) and long methods
+						* Rule 6: Keep the method in one place, inject the class and call it, [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)
+						* Rule 7: Avoid in-line comments (comment with code), put comments in the method doc
+						* Don't forget the consideration and reading
+
+						PS: you can print the recap slides and mug them up.
+				</section>
+
+				<section data-markdown>
+					### References
+
+					* Most code examples are taken from YIPL open source code on Github.
+					* [Rules for simpler code - laracast](https://laracasts.com/series/simple-rules-for-simpler-code/episodes/3)
+					* [Maintainable Code](https://www.justsoftwaresolutions.co.uk/articles/maintainable_code.html)
+					* [Readable Code](http://werve.net/articles/writing-readable-code/)
+					* [Object Calisthenics](http://williamdurand.fr/2013/06/03/object-calisthenics/)
+					* [Your code sucks - let fix it](http://www.slideshare.net/rdohms/your-code-sucks-lets-fix-it-15471808)
+				</section>
+
+				<section data-markdown>
+					### Thanks
+
+					#### Hope we can step by step minimize code complexity and write clean, simple and maintainable code.
+
+					#### Remember, simple, understandable, readable and eventually maintainable code is greater than any pattern ever invented (be practical).
+				</section>
+			</div>
+
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/lib/js/head.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/lib/js/classList.min.js', condition: function() { return !document.body.classList; } },
+					{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/plugin/markdown/marked.min.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/plugin/markdown/markdown.min.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/plugin/highlight/highlight.min.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/plugin/zoom-js/zoom.min.js', async: true },
+					{ src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.1.0/plugin/notes/notes.min.js', async: true },
+				],
+				keyboard: {
+					    39: 'next',
+					    37: 'prev'
+					}
+			});
+
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,17 @@
+.reveal h2 {
+    font-weight: bold;
+}
+
+.reveal h3 {
+  text-transform: initial;
+  font-weight: bold;
+}
+
+.reveal h4 {
+  text-transform: initial;
+  font-weight: bold;
+}
+
+.reveal section p img {
+	height: 400px;
+}
